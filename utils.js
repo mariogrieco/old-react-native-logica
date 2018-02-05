@@ -4,6 +4,14 @@ let Board = Map()
 Board = Board.set('size', 8)
 Board = Board.set('state', Map())
 
+function getOneBoard () {
+  let Board = Map()
+  Board = Board.set('size', 8)
+  Board = Board.set('state', Map())
+
+  return Board
+}
+
 function initialize (Board) {
   let state = Board.get('state')
   let size = Board.get('size')
@@ -17,6 +25,7 @@ function initialize (Board) {
   state = state.setIn([size/2, size/2], 'B ')
   state = state.setIn([(size/2)-1, (size/2)-1], 'N ') // es blanco
   state = state.setIn([(size/2), (size/2)-1], 'N ')
+  state = state.setIn([(size/2), (size/2)-2], 'N ')
   state = state.setIn([(size/2)-1, (size/2)], 'N ')
 //   state = state.setIn([(size/2)+2, (size/2)], 'N ')
 
@@ -172,9 +181,15 @@ function validate (Board, chip_name_a = 'B ', chip_name_b = 'N ') {
   return Board.set('state', state)
 }
 
-Board = initialize(Board)
+// Board = initialize(Board)
 // Board = validate(Board, 'N ', 'B ')
+// // printState(Board)
+// // console.log('\n')
+// Board = validate(Board)
 // printState(Board)
-// console.log('\n')
-Board = validate(Board)
-printState(Board)
+module.exports = {
+  initialize,
+  printState,
+  validate,
+  getOneBoard
+}
