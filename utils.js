@@ -12,9 +12,12 @@ function getOneBoard () {
   let Board = Map()
   Board = Board.set('size', 8)
   Board = Board.set('state', Map())
+  Board = initialize(Board)
 
   return Board
 }
+
+getOneBoard()
 
 function initialize (Board) {
   let state = Board.get('state')
@@ -27,9 +30,9 @@ function initialize (Board) {
   }
 
   state = state.setIn([size/2, size/2], 'B ')
-  state = state.setIn([(size/2)-1, (size/2)-1], 'N ') // es blanco
+  state = state.setIn([(size/2)-1, (size/2)-1], 'B ') // es blanco
   state = state.setIn([(size/2), (size/2)-1], 'N ')
-  state = state.setIn([(size/2), (size/2)-2], 'N ')
+  // state = state.setIn([(size/2), (size/2)-2], 'N ')
   state = state.setIn([(size/2)-1, (size/2)], 'N ')
 //   state = state.setIn([(size/2)+2, (size/2)], 'N ')
 
@@ -50,6 +53,207 @@ function printState (Board) {
     console.log(printBuffer, "\n")
     printBuffer = ''
   }
+}
+
+function eat (Board, col, row, chip_name_a = 'B ') {
+  let size = Board.get('size')
+  let state = Board.get('state')
+  let band = true
+  let tempCol = col
+  let tempRow = row
+
+  // dere vertical
+  while (tempCol < size && band) {
+    tempCol++
+    if ( state.getIn([tempCol, row]) !== '0 ' && state.getIn([tempCol, row]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, row]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol > col) {
+      tempCol--;
+      state = state.setIn([tempCol, row], chip_name_a)
+    }
+  }
+
+  // arriba vertical
+  band = true
+  tempCol = col
+  tempRow = row
+  while (tempCol >= 0 && band) {
+    tempCol--
+    if ( state.getIn([tempCol, row]) !== '0 ' && state.getIn([tempCol, row]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, row]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol < col) {
+      tempCol++;
+      state = state.setIn([tempCol, row], chip_name_a)
+    }
+  }
+
+  
+  // atras horiz
+  band = true
+  tempCol = col
+  tempRow = row
+  while (tempRow >= 0 && band) {
+    tempRow--
+    if ( state.getIn([col, tempRow]) !== '0 ' && state.getIn([col, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([col, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempRow < row) {
+      tempRow++;
+      state = state.setIn([col, tempRow], chip_name_a)
+    }
+  }
+
+  // plante horizontal
+  band = true
+  tempCol = col
+  tempRow = row
+  while (tempRow < size && band) {
+    tempRow++
+    if ( state.getIn([col, tempRow]) !== '0 ' && state.getIn([col, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([col, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempRow > row) {
+      tempRow--;
+      state = state.setIn([col, tempRow], chip_name_a)
+    }
+  }
+  // diagonal , abajo dere
+  band = true
+  tempCol = col
+  tempRow = row
+
+  while (tempCol < size && tempRow < size && band) {
+    tempCol++
+    tempRow++
+    if ( state.getIn([tempCol, tempRow]) !== '0 ' && state.getIn([tempCol, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol > col && tempRow > row) {
+      tempCol--;
+      tempRow--;
+      state = state.setIn([tempCol, tempRow], chip_name_a)
+    }
+  }
+
+  // diagonal , arriba dere
+  band = true
+  tempCol = col
+  tempRow = row
+
+  while (tempCol >= 0 && tempRow < size && band) {
+    tempCol--
+    tempRow++
+    if ( state.getIn([tempCol, tempRow]) !== '0 ' && state.getIn([tempCol, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol < col && tempRow > row) {
+      tempCol++;
+      tempRow--;
+      state = state.setIn([tempCol, tempRow], chip_name_a)
+    }
+  }
+
+// diagoanl abajo izq
+  while (tempCol < size && tempRow >= 0 && band) {
+    tempCol++
+    tempRow--
+    if ( state.getIn([tempCol, tempRow]) !== '0 ' && state.getIn([tempCol, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol > col && tempRow < row) {
+      tempCol--;
+      tempRow++;
+      state = state.setIn([tempCol, tempRow], chip_name_a)
+    }
+  }
+  
+
+  // diagonal arriba iqz
+  // diagonal , abajo dere
+  band = true
+  tempCol = col
+  tempRow = row
+
+  while (tempCol >= 0 && tempRow >= 0 && band) {
+    tempCol--
+    tempRow--
+    if ( state.getIn([tempCol, tempRow]) !== '0 ' && state.getIn([tempCol, tempRow]) !== chip_name_a ) {
+      band = true 
+    }
+    else {
+      if (state.getIn([tempCol, tempRow]) !== chip_name_a) {
+        band = false
+      }
+      break;
+    }
+  }
+  if (band) {
+    while (tempCol < col && tempRow < row) {
+      tempCol++;
+      tempRow++;
+      state = state.setIn([tempCol, tempRow], chip_name_a)
+    }
+  }
+
+  return Board.set('state', state)
 }
 
 function validate (Board, chip_name_a = 'B ', chip_name_b = 'N ') {
@@ -185,15 +389,10 @@ function validate (Board, chip_name_a = 'B ', chip_name_b = 'N ') {
   return Board.set('state', state)
 }
 
-// Board = initialize(Board)
-// Board = validate(Board, 'N ', 'B ')
-// // printState(Board)
-// // console.log('\n')
-// Board = validate(Board)
-// printState(Board)
 module.exports = {
   initialize,
   printState,
   validate,
-  getOneBoard
+  getOneBoard,
+  eat
 }
