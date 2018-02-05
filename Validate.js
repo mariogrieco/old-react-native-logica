@@ -15,16 +15,10 @@ function initialize (Board) {
   }
 
   state = state.setIn([size/2, size/2], 'B ')
-  state = state.setIn([(size/2)+1, size/2], 'B ')
-  state = state.setIn([(size/2)-1, (size/2)-1], 'B ')
-  state = state.setIn([(size/2)-2, (size/2)-1], 'B ')
-  state = state.setIn([(size/2)-3, (size/2)-1], 'B ')
+  state = state.setIn([(size/2)-1, (size/2)-1], 'N ') // es blanco
   state = state.setIn([(size/2), (size/2)-1], 'N ')
-  state = state.setIn([(size/2)+1, (size/2)-1], 'N ')
-  state = state.setIn([(size/2)+2, (size/2)-1], 'N ')
   state = state.setIn([(size/2)-1, (size/2)], 'N ')
-  state = state.setIn([(size/2)-2, (size/2)], 'N ')
-//   state = state.setIn([(size/2)-3, (size/2)], 'N ')
+//   state = state.setIn([(size/2)+2, (size/2)], 'N ')
 
   // return an empty board state
   return Board.set('state', state)
@@ -110,11 +104,67 @@ function validate (Board, chip_name_a = 'B ', chip_name_b = 'N ') {
     indexCol = col
     indexRow = row
     band = false
-        //   while () diegonal dere abajo
+        //   while () diegonal arriba atras
+            indexCol--
+            indexRow--
+            while (indexRow >= 0 && indexCol >= 0 && state.getIn([indexRow, indexCol]) === chip_name_b) {
+            indexCol--
+            indexRow--
+            band = true
+            }
+            if (band && indexCol >= 0 && indexRow >= 0) {
+              state = state.setIn([indexRow, indexCol], 'CM')   
+            }
 
-    //   while () diegonal izq abajo
-    //   while () diegonal dere arriba
-    //   while () diegonal izq arriba
+
+     // OTRO
+     indexCol = col
+     indexRow = row
+     band = false
+         //   while () diegonal bajo dere
+             indexCol++
+             indexRow++
+             while (indexRow < size && indexCol < size && state.getIn([indexRow, indexCol]) === chip_name_b) {
+             indexCol++
+             indexRow++
+             band = true
+             }
+             if (band && indexCol < size && indexRow < size) {
+               state = state.setIn([indexRow, indexCol], 'CM')   
+             }
+
+    // OTRO
+     indexCol = col
+     indexRow = row
+     band = false
+         //   while () diegonal arriba dere
+             indexCol++
+             indexRow--
+             while (indexRow >= 0 && indexCol < size && state.getIn([indexRow, indexCol]) === chip_name_b) {
+             indexCol++
+             indexRow--
+             band = true
+             }
+             if (band && indexCol < size && indexRow >= 0) {
+               state = state.setIn([indexRow, indexCol], 'CM')   
+             }
+
+
+                  // OTRO
+     indexCol = col
+     indexRow = row
+     band = false
+         //   while () diegonal bajo iqz
+             indexCol--
+             indexRow++
+             while (indexRow < size && indexCol >= 0 && state.getIn([indexRow, indexCol]) === chip_name_b) {
+             indexCol--
+             indexRow++
+             band = true
+             }
+             if (band && indexCol >= 0 && indexRow < size) {
+               state = state.setIn([indexRow, indexCol], 'CM')   
+             }
       }
     }
   }
