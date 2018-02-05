@@ -1,4 +1,8 @@
-const { Map, toJS, fromJS } = require('immutable')
+const { 
+  Map, 
+  toJS, 
+  fromJS 
+} = require('immutable')
 let Board = Map()
 
 Board = Board.set('size', 8)
